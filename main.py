@@ -42,12 +42,10 @@ def read_json(name: str) -> dict:
 
 def create_config(config_name: str) -> None:
     result = execute(('osascript', './findApps.scpt'))
+    ignored_apps = result.pop(0) == 'true'
     applicationsCount = int(result.pop(0))
-    window_count = int(result.pop(0))
-    print(result)
-    if window_count > applicationsCount:
-        print("Multiple windows for the same application are not supported.")
-        sys.exit(1)
+    if ignored_apps:
+        print("Warning: Multiple windows for the same application are not supported.")
     [applicationNames, bounds] = [result[:applicationsCount], result[applicationsCount:]]
 
     apps = {}
@@ -78,6 +76,15 @@ def read_config(filename: str) -> None:
     [open_app(key, value) for key, value in config if key not in UNSUPPORTED_APPS]
 
 def main():
+    if len(sys.argv) < 2:
+        print(
+            '''
+    Command line arguments:
+        --create=<config_name> - creates window workspace configuration (ex. python --create="config1")
+        --read=<config_name> - reads window workspace configuration (ex. python --read="config1") 
+            '''
+        )
+        return
     options, remainder = getopt.getopt(sys.argv[1:], 'c:r:', ['create=', 'read='])
     for opt, arg in options:
         if opt in ('-c', '--create'):
