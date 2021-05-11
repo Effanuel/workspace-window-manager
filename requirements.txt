@@ -1,1 +1,2 @@
 AppKit==0.2.8
+pyobjc==7.2

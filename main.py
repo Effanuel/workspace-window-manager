@@ -63,7 +63,7 @@ def create_config(config_name: str) -> None:
 
         apps[name] = {"x": x, "y": y, "width": width, "height": height}
 
-    dimensions = "temp" #get_screen_dimensions()
+    dimensions = get_screen_dimensions()
     save_to_json({"apps": apps, "dimensions": dimensions}, config_name)
 
     print(f'Configuration ./{config_name}.json for dimensions {dimensions} was created.')
