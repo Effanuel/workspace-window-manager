@@ -76,8 +76,15 @@ def read_config(filename: str) -> None:
         extra_delay = APP_NAMES_MAP[name]['delay'] if in_map and 'delay' in APP_NAMES_MAP[name] else 0
         execute(('osascript',  './openApp.scpt', app_name, x, y, width, height, f'{extra_delay}'))
 
-    config = read_json(filename)['apps'].items()
-    [open_app(key, value) for key, value in config if key not in UNSUPPORTED_APPS]
+    data = read_json(filename)
+
+    my_dimensions = get_screen_dimensions()
+    config_dimensions = data['dimensions']
+    config_apps = data['apps'].items()
+
+    if my_dimensions != config_dimensions:
+        print(f'Warning: read config monitor dimensions and this computer"s mismatched: {config_dimensions} | {my_dimensions}')
+    [open_app(key, value) for key, value in config_apps if key not in UNSUPPORTED_APPS]
 
 def main():
     if len(sys.argv) < 2:
