@@ -5,17 +5,18 @@ import sys
 import getopt
 import AppKit
 
+# Many applications
 APP_NAMES_MAP = {
-    "Electron": "Code" # open 
+    "Electron": {
+        "name": "Code"
+    }, 
+    "Teams": {
+        "name": "Microsoft Teams",
+        "delay": 3
+    }
 }
-# tell application "System Events" to tell process "Code"
-#     tell window 1
-#         set size to {1024, 768}
-#         set position to {100, 100}
-#     end tell
-# end tell
 
-UNSUPPORTED_APPS = ['Finder', 'Teams']
+UNSUPPORTED_APPS = ['Finder']
 
 def execute(command: tuple[str]):
     try:
@@ -62,15 +63,18 @@ def create_config(config_name: str) -> None:
 
         apps[name] = {"x": x, "y": y, "width": width, "height": height}
 
-    dimensions = get_screen_dimensions()
+    dimensions = "temp" #get_screen_dimensions()
     save_to_json({"apps": apps, "dimensions": dimensions}, config_name)
 
     print(f'Configuration ./{config_name}.json for dimensions {dimensions} was created.')
 
 def read_config(filename: str) -> None:
     def open_app(name: str, value) -> None:
+        in_map = name in APP_NAMES_MAP
+        app_name = name if not in_map else APP_NAMES_MAP[name]['name']
         x, y, width, height = value['x'], value['y'], value['width'], value['height']
-        execute(('osascript',  './openApp.scpt',  f"{name}", x, y, width, height))
+        extra_delay = APP_NAMES_MAP[name]['delay'] if in_map and 'delay' in APP_NAMES_MAP[name] else 0
+        execute(('osascript',  './openApp.scpt', app_name, x, y, width, height, f'{extra_delay}'))
 
     config = read_json(filename)['apps'].items()
     [open_app(key, value) for key, value in config if key not in UNSUPPORTED_APPS]
