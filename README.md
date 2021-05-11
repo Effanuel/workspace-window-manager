@@ -19,3 +19,9 @@ python main.py --read=data
 
 ### Note:
 * Some apps are not scriptable, so they can't generically be opened using applescript
+
+
+### TODO:
+* print application names when creating a config;
+* add fix script which renames appkit lib folder;
+* fix dimensions printing;
