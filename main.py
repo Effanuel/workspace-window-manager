@@ -33,6 +33,7 @@ def get_screen_dimensions() -> str:
     return f"{width_sum}x{height_sum}"
 
 def save_to_json(data, name: str) -> None:
+    print(f'Saved applications: {list(data["apps"].keys())}')
     with open(f'{name}.json', 'w') as outfile:
         json.dump(data, outfile, indent=2)
 
