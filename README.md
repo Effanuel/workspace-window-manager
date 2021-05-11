@@ -8,12 +8,12 @@ How to use this script:
 
 Create a config and save it to a json file *(saves to data.json file, only json files are supported)*
 ```zsh
-python main.py --create=data`
+python main.py --create=data
 ```
 
 Read config *(reads data.json file)*
 ```zsh
-python main.py --read=data`
+python main.py --read=data
 ```
 
 
