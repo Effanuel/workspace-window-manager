@@ -16,12 +16,6 @@ on run argv
         delay delayInSeconds -- some applications take a considerable amount of time to launch
     end if
 
-    if (appName = "iTerm2") then -- iTerm2 requires special config
-        tell application "iTerm2"
-            create window with default profile
-        end tell
-    end if
-
     tell application "System Events" to tell process appName
         tell windows 1
             set position to {positionX, positionY}
